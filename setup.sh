@@ -39,8 +39,8 @@ build_opencv_js (){
 	cd thirdparty
 	python opencv-4.x/platforms/js/build_js.py build_wasm --build_wasm --emscripten_dir="emsdk/upstream/emscripten"
 }
-#install_dep
-#download_opencv
-#build_opencv
-#install_emsdk
+# install_dep
+# download_opencv
+# build_opencv
+# install_emsdk
 build_opencv_js
