@@ -1,4 +1,3 @@
-from unittest import result
 import cv2 as cv
 import numpy as np
 
@@ -29,7 +28,7 @@ def contour_edge(img):
 def increase_edge_thickness(img):
     # kernel = cv.getStructuringElement(cv.MORPH_RECT, (5, 5))
     img = cv.bitwise_not(img)
-    kernel = np.ones((3,3),np.uint8)
+    kernel = np.ones((5,5),np.uint8)
     result_image = cv.dilate(img, kernel,iterations=1)
     # result_image = cv.erode(img,kernel=kernel,iterations=1)
     result_image = cv.bitwise_not(result_image)
@@ -71,6 +70,7 @@ def convert_rgb_to_hsv(arr):
     elif cmax == arr_dot[1]:
         h_value = 60 * (((arr_dot[2]-arr_dot[0])/del_value)+2)
     else :
+
         h_value = 60 * (((arr_dot[0]-arr_dot[1])/del_value)+4)
 
     if cmax == 0:
@@ -93,15 +93,12 @@ def DrawPattern(image,pattern,pattern_size,pattern_sep):
 def DetectColor(orginal_image,x,y,value,pattern,pattern_size,pattern_sep):
     bgr_value = orginal_image[x,y]
     rgb_value = bgr_value[::-1]
-    print(type(rgb_value))
     hsv_value = convert_rgb_to_hsv(rgb_value)
     hsv_value = convert_hsv_to_standard(hsv_value)
     l_b = hsv_value - value
     l_b[l_b > 255-value] = 0
     u_b = hsv_value + value
     u_b[u_b < value] = 255
-    print(l_b)
-    print(u_b)
     orginal_image = cv.cvtColor(orginal_image,cv.COLOR_BGR2HSV)
     mask = cv.inRange(orginal_image,l_b,u_b)
     result_image = cv.bitwise_and(orginal_image,orginal_image,mask=mask)
@@ -111,23 +108,54 @@ def DetectColor(orginal_image,x,y,value,pattern,pattern_size,pattern_sep):
 
 
 if __name__ == '__main__':
-    image = cv.imread('/home/sri/VirtualVision/data/sample/digestive_system.jpg', cv.IMREAD_COLOR)
+    image = cv.imread('/home/sri/VirtualVision/data/sample/printer.jpg', cv.IMREAD_COLOR)
 
     threshold_value = find_threshold_value(image)
     
     edge_image = edge_detection(image, threshold_value-25, threshold_value+25)
-    
+    cv.imshow('edge_image',image)
+    while True:
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv.destroyAllWindows()
     edge_image_inv = cv.bitwise_not(edge_image)
+    cv.imshow('edge_image',edge_image_inv)
+    while True:
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv.destroyAllWindows()
     
     contour_edge = contour_edge(edge_image_inv)
+    cv.imshow('edge_image',contour_edge)
+    while True:
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv.destroyAllWindows()
     
+    contour_edge = cv.erode(contour_edge,np.ones((3,3),np.uint8))
+    cv.imshow('result', contour_edge)
+    while True:
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv.destroyAllWindows()
+
     color_result = add_color(image,contour_edge)
-    
+    cv.imshow('edge_image',color_result)
+    while True:
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv.destroyAllWindows()
     increase_edge_thickness_image = increase_edge_thickness(color_result)
     
-    result_image = DetectColor(image,174,410,10,'dot',1,5)
+    result_image = DetectColor(image,320,390,10,'dot',1,5)
+    cv.imshow('edge_image',result_image)
+    while True:
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv.destroyAllWindows()
+    
     cv.imwrite('yellow.jpg',result_image)
-    cv.imshow('result', result_image)
+
     while True:
         if cv.waitKey(1) & 0xFF == ord('q'):
             break

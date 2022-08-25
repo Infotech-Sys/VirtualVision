@@ -60,7 +60,7 @@ if __name__ == '__main__':
     result_image = edge_detection(image, result_value-25, result_value+25)
     result_image = cv.bitwise_not(result_image)
     result_image = contour_edge(result_image)
-    result_image = add_color(image,result_image)
+    result_image = add_color(image
     result_image = increase_edge_thickness(result_image)
     cv.imwrite("increase_edge.png",result_image)
     cv.imshow('result', result_image)
