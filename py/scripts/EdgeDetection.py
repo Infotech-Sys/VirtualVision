@@ -1,3 +1,4 @@
+from unittest import result
 import cv2 as cv
 import numpy as np
 
@@ -106,7 +107,7 @@ def DetectColor(orginal_image,x,y,value,pattern,pattern_size,pattern_sep):
     result_image = cv.bitwise_and(orginal_image,orginal_image,mask=mask)
     result_image = cv.cvtColor(result_image,cv.COLOR_HSV2BGR)
     pattern_image = DrawPattern(result_image,pattern,pattern_size,pattern_sep)
-    return result_image
+    return pattern_image
 
 
 if __name__ == '__main__':
@@ -124,8 +125,8 @@ if __name__ == '__main__':
     
     increase_edge_thickness_image = increase_edge_thickness(color_result)
     
-    result_image = DetectColor(image,290,390,20,'dot',1,5)
-    # cv.imwrite('test.jpg',result_image)
+    result_image = DetectColor(image,174,410,10,'dot',1,5)
+    cv.imwrite('yellow.jpg',result_image)
     cv.imshow('result', result_image)
     while True:
         if cv.waitKey(1) & 0xFF == ord('q'):
