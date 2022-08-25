@@ -1,4 +1,3 @@
-from re import L
 import cv2 as cv
 import numpy as np
 
@@ -83,7 +82,14 @@ def convert_rgb_to_hsv(arr):
 def convert_hsv_to_standard(hsv_value):
     return np.array([hsv_value[0]/360*255,hsv_value[1]/100*255,hsv_value[2]/100*255],np.uint8)
 
-def DetectColor(orginal_image,x,y,value):
+def DrawPattern(image,pattern,pattern_size,pattern_sep):
+    if pattern == 'dot':
+        for i in range(0,image.shape[1],pattern_sep):
+            for j in range(0,image.shape[0],pattern_sep):
+                image = cv.circle(image,(i,j),pattern_size,(0,0,0),-1)
+        return image
+
+def DetectColor(orginal_image,x,y,value,pattern,pattern_size,pattern_sep):
     bgr_value = orginal_image[x,y]
     rgb_value = bgr_value[::-1]
     print(type(rgb_value))
@@ -98,18 +104,28 @@ def DetectColor(orginal_image,x,y,value):
     orginal_image = cv.cvtColor(orginal_image,cv.COLOR_BGR2HSV)
     mask = cv.inRange(orginal_image,l_b,u_b)
     result_image = cv.bitwise_and(orginal_image,orginal_image,mask=mask)
-
+    result_image = cv.cvtColor(result_image,cv.COLOR_HSV2BGR)
+    pattern_image = DrawPattern(result_image,pattern,pattern_size,pattern_sep)
     return result_image
+
 
 if __name__ == '__main__':
     image = cv.imread('/home/sri/VirtualVision/data/sample/digestive_system.jpg', cv.IMREAD_COLOR)
-    result_value = find_threshold_value(image)
-    result_image = edge_detection(image, result_value-25, result_value+25)
-    result_image = cv.bitwise_not(result_image)
-    result_image = contour_edge(result_image)
-    result_image = add_color(image,result_image)
-    result_image = increase_edge_thickness(result_image)
-    result_image = DetectColor(image,290,390,80)
+
+    threshold_value = find_threshold_value(image)
+    
+    edge_image = edge_detection(image, threshold_value-25, threshold_value+25)
+    
+    edge_image_inv = cv.bitwise_not(edge_image)
+    
+    contour_edge = contour_edge(edge_image_inv)
+    
+    color_result = add_color(image,contour_edge)
+    
+    increase_edge_thickness_image = increase_edge_thickness(color_result)
+    
+    result_image = DetectColor(image,290,390,20,'dot',1,5)
+    # cv.imwrite('test.jpg',result_image)
     cv.imshow('result', result_image)
     while True:
         if cv.waitKey(1) & 0xFF == ord('q'):
