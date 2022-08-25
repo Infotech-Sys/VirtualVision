@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Aug 23 07:05:44 2022
+# Make data base, printed on Wed Aug 24 13:02:59 2022
 
 # Variables
 
@@ -21,7 +21,7 @@ LC_ALL = C
 # environment
 NO_AT_BRIDGE = 1
 # environment
-I3SOCK = /run/user/1000/i3/ipc-socket.665
+I3SOCK = /run/user/1000/i3/ipc-socket.682
 # environment
 VSCODE_CWD = /home/sri
 # default
@@ -79,7 +79,7 @@ CONDA_SHLVL = 0
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 12171
+VSCODE_PID = 982
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -193,7 +193,7 @@ _CE_CONDA =
 
 # Directories
 
-# . (device 39, inode 721654): 12 files, no impossibilities.
+# . (device 38, inode 721654): 12 files, no impossibilities.
 
 # 12 files, no impossibilities in 1 directories.
 
@@ -251,6 +251,6 @@ GNUmakefile:
 # strcache performance: lookups = 23 / hit rate = 13%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/23=0%
-# Finished Make data base on Tue Aug 23 07:05:44 2022
+# Finished Make data base on Wed Aug 24 13:02:59 2022
 
  

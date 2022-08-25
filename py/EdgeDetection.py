@@ -1,4 +1,3 @@
-from re import L
 import cv2 as cv
 import numpy as np
 
@@ -54,62 +53,16 @@ def add_color(orginal_image,border_image):
     return result
 
 
-def convert_rgb_to_hsv(arr):
-    arr_dot = arr/255
-    cmax = arr_dot.max()
-    cmin = arr_dot.min()
-    del_value = cmax - cmin
-
-    h_value=0
-    s_value=0
-    v_value=cmax
-
-    if del_value == 0:
-        h_value = 0
-    elif cmax == arr_dot[0]:
-        h_value = 60 * (((arr_dot[1]-arr_dot[2])/del_value)%6)
-    elif cmax == arr_dot[1]:
-        h_value = 60 * (((arr_dot[2]-arr_dot[0])/del_value)+2)
-    else :
-        h_value = 60 * (((arr_dot[0]-arr_dot[1])/del_value)+4)
-
-    if cmax == 0:
-        s_value=0
-    else:
-        s_value = del_value/cmax
-
-    return np.array([h_value,s_value*100,v_value*100])
-
-def convert_hsv_to_standard(hsv_value):
-    return np.array([hsv_value[0]/360*255,hsv_value[1]/100*255,hsv_value[2]/100*255],np.uint8)
-
-def DetectColor(orginal_image,x,y,value):
-    bgr_value = orginal_image[x,y]
-    rgb_value = bgr_value[::-1]
-    print(type(rgb_value))
-    hsv_value = convert_rgb_to_hsv(rgb_value)
-    hsv_value = convert_hsv_to_standard(hsv_value)
-    l_b = hsv_value - value
-    l_b[l_b > 255-value] = 0
-    u_b = hsv_value + value
-    u_b[u_b < value] = 255
-    print(l_b)
-    print(u_b)
-    orginal_image = cv.cvtColor(orginal_image,cv.COLOR_BGR2HSV)
-    mask = cv.inRange(orginal_image,l_b,u_b)
-    result_image = cv.bitwise_and(orginal_image,orginal_image,mask=mask)
-
-    return result_image
-
 if __name__ == '__main__':
-    image = cv.imread('/home/sri/VirtualVision/data/sample/digestive_system.jpg', cv.IMREAD_COLOR)
+    image = cv.imread('/home/sri/VirtualVision/data/sample/eye.jpg', cv.IMREAD_COLOR)
+    # image = cv.resize(image,(300,300))
     result_value = find_threshold_value(image)
     result_image = edge_detection(image, result_value-25, result_value+25)
     result_image = cv.bitwise_not(result_image)
     result_image = contour_edge(result_image)
     result_image = add_color(image,result_image)
     result_image = increase_edge_thickness(result_image)
-    result_image = DetectColor(image,290,390,80)
+    cv.imwrite("increase_edge.png",result_image)
     cv.imshow('result', result_image)
     while True:
         if cv.waitKey(1) & 0xFF == ord('q'):

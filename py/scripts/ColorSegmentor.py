@@ -32,7 +32,7 @@ def convert_rgb_to_hsv(arr):
 def convert_hsv_to_standard(hsv_value):
     return np.array([hsv_value[0]/360*255,hsv_value[1]/100*255,hsv_value[2]/100*255],np.uint8)
 
-def DetectColor(orginal_image):
+def DetectColor(orginal_image,):
 
 if __name__ == "__main__":
     image = cv.imread("/home/sri/VirtualVision/data/sample/digestive_system.jpg",cv.IMREAD_COLOR)
