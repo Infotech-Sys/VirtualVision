@@ -108,56 +108,15 @@ def DetectColor(orginal_image,x,y,value,pattern,pattern_size,pattern_sep):
 
 
 if __name__ == '__main__':
-    image = cv.imread('/home/sri/VirtualVision/data/sample/printer.jpg', cv.IMREAD_COLOR)
+    filename='animal_cell.jpg'
+    image = cv.imread(f'/home/sri/VirtualVision/data/sample/{filename}', cv.IMREAD_COLOR)
 
     threshold_value = find_threshold_value(image)
-    
     edge_image = edge_detection(image, threshold_value-25, threshold_value+25)
-    cv.imshow('edge_image',image)
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
     edge_image_inv = cv.bitwise_not(edge_image)
-    cv.imshow('edge_image',edge_image_inv)
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
-    
     contour_edge = contour_edge(edge_image_inv)
-    cv.imshow('edge_image',contour_edge)
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
-    
-    contour_edge = cv.erode(contour_edge,np.ones((3,3),np.uint8))
-    cv.imshow('result', contour_edge)
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
-
-    color_result = add_color(image,contour_edge)
-    cv.imshow('edge_image',color_result)
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
-    increase_edge_thickness_image = increase_edge_thickness(color_result)
-    
-    result_image = DetectColor(image,320,390,10,'dot',1,5)
-    cv.imshow('edge_image',result_image)
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
-    
-    cv.imwrite('yellow.jpg',result_image)
-
-    while True:
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cv.destroyAllWindows()
-    
+    # contour_edge = cv.erode(contour_edge,np.ones((3,3),np.uint8))
+    # color_result = add_color(image,contour_edge)
+    # increase_edge_thickness_image = increase_edge_thickness(color_result)
+    # result_image = DetectColor(image,320,390,10,'dot',1,5)
+    cv.imwrite(f'output/{filename}',contour_edge) 
